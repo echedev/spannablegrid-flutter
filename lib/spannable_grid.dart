@@ -1,8 +1,49 @@
+/// [SpannableGrid] Flutter widget that allows it's cells to span columns and
+/// rows and supports editing.
 library spannable_grid;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+/// Metadata defining the item (cell) of [SpannableGrid]
+///
+/// The item [id] is required and must be unique within the grid widget.
+/// Item is positioned to [column] and [row] withing the grid and span
+/// [columnSpan] and [rowSpan] cells. By default, the grid item occupies
+/// a single cell.
+/// The content of the cell is determined by the [child] widget.
+///
+/// ```dart
+/// List<SpannableGridCellData> cells = List();
+/// cells.add(SpannableGridCellData(
+///   column: 1,
+///   row: 1,
+///   columnSpan: 2,
+///   rowSpan: 2,
+///   id: "Test Cell 1",
+///   child: Container(
+///     color: Colors.lime,
+///     child: Center(
+///       child: Text("Tile 2x2",
+///         style: Theme.of(context).textTheme.title,
+///       ),
+///      ),
+///   ),
+/// ));
+/// cells.add(SpannableGridCellData(
+///   column: 4,
+///   row: 1,
+///   id: "Test Cell 2",
+///   child: Container(
+///     color: Colors.lime,
+///     child: Center(
+///       child: Text("Tile 1x1",
+///         style: Theme.of(context).textTheme.title,
+///       ),
+///     ),
+///   ),
+/// ));
+/// ```
 class SpannableGridCellData {
   SpannableGridCellData(
       { @required this.id,
@@ -20,6 +61,30 @@ class SpannableGridCellData {
   int rowSpan;
 }
 
+/// A grid widget that support its items to span columns and rows.
+///
+/// Widget layouts its children (defined in [cells]) in a grid of fixed [columns]
+/// and [rows].
+/// The gaps between grid cells is defined by optional [spacing] parameter.
+/// The [SpannableGrid] is sized to fit its parent widget width.
+///
+/// The widget supports editing mode in which user can move selected cell to
+/// available places withing the grid. User enter the editing mode by long
+/// press on the cell. In the editing mode the editing cell is highlighted
+/// while other cells are faded. All grid structure becomes visible. User exit
+/// the editing mode by click on editing cell. Updated [SpannableGridCellData]
+/// object is returned in the [onCellChanged] callback.
+///
+/// ```dart
+/// SpannableGrid(
+///   columns: 4,
+///   rows: 4,
+///   cells: cells,
+///   spacing: 2.0,
+///   onCellChanged: (cell) { print('Cell ${cell.id} changed'); },
+/// ),
+/// ```
+///
 class SpannableGrid extends StatefulWidget {
   SpannableGrid({Key key,
     @required this.cells,
