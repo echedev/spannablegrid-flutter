@@ -3,7 +3,7 @@
 A Flutter **SpannableGrid** widget that allows it's cells to span columns 
 and rows and supports moving cells inside the grid.
 
-<img src="/assets/spannablegrid-001.gif"  height = "400" alt="SpannableGrid Demo">
+<img src="./assets/spannablegrid-001.gif"  height = "400" alt="SpannableGrid Demo">
 
 ## Features
 
