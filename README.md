@@ -1,4 +1,4 @@
-# spannable_grid
+# Spannable Grid
 
 A Flutter **SpannableGrid** widget that allows it's cells to span columns 
 and rows and supports moving cells inside the grid.
