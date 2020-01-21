@@ -100,7 +100,7 @@ Please check the [Changelog](CHANGELOG.md) page for the latest version and chang
 
 Author: Evgeny Cherkasov.
 
-This package is published under [MIT License](LICENSE.md).
+This package is published under [MIT License](LICENSE).
 
 #### Contributions
 
