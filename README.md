@@ -3,7 +3,7 @@
 A Flutter **SpannableGrid** widget that allows it's cells to span columns 
 and rows and supports moving cells inside the grid.
 
-<img src="https://raw.githubusercontent.com/ech89899/spannablegrid-flutter/master/assets/spannablegrid-001.gif"  height = "400" alt="SpannableGrid Demo">
+<img src="/assets/spannablegrid-001.gif"  height = "400" alt="SpannableGrid Demo">
 
 ## Features
 
@@ -88,19 +88,19 @@ Tap on editing cell will exit the editing mode. The updated cell is returned in 
 
 #### Full example
 
-You can find demo app in the [example](https://github.com/ech89899/spannedgrid-flutter/tree/master/example) project.
+You can find demo app in the [example](https://github.com/ech89899/spannablegrid-flutter/tree/master/example) project.
 
 ## More
 
 #### Changelog
 
-Please check the [Changelog](https://github.com/ech89899/spannedgrid-flutter/blob/master/CHANGELOG.md) page for the latest version and changes.
+Please check the [Changelog](CHANGELOG.md) page for the latest version and changes.
 
 #### License
 
 Author: Evgeny Cherkasov.
 
-This package is published under [MIT License](https://github.com/ech89899/spannedgrid-flutter/blob/master/LICENSE.md).
+This package is published under [MIT License](LICENSE.md).
 
 #### Contributions
 
