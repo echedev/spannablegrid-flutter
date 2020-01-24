@@ -61,7 +61,8 @@ class SpannableGridCellData {
   int rowSpan;
 }
 
-/// A grid widget that support its items to span columns and rows.
+/// A grid widget that allows its items to span columns and rows and supports
+/// editing.
 ///
 /// Widget layouts its children (defined in [cells]) in a grid of fixed [columns]
 /// and [rows].
@@ -91,14 +92,22 @@ class SpannableGrid extends StatefulWidget {
     @required this.columns,
     @required this.rows,
     this.spacing = 0.0,
-    this.onCellChanged })
-      : super(key: key);
+    this.onCellChanged,
+    this.editingGridColor = Colors.black12,
+    this.editingCellDecoration,
+  }) : super(key: key);
 
   final List<SpannableGridCellData> cells;
   final int columns;
   final int rows;
   final double spacing;
   final Function(SpannableGridCellData) onCellChanged;
+
+  /// This color is used to display available grid cells in the editing mode.
+  final Color editingGridColor;
+
+  /// Decoration to highlight the editing cell in the editing mode.
+  final Decoration editingCellDecoration;
 
   @override
   _SpannableGridState createState() => _SpannableGridState();
@@ -165,7 +174,7 @@ class _SpannableGridState extends State<SpannableGrid> {
           child: DragTarget(
             builder: (context, List<SpannableGridCellData> candidateData, rejectedData) {
               return Container(
-                color: Colors.black12,
+                color: widget.editingGridColor,
               );
             },
             onWillAccept: (data) {
@@ -262,11 +271,11 @@ class _SpannableGridState extends State<SpannableGrid> {
             child: cell.child,
           ),
           Container(
-            decoration: BoxDecoration(
-                border: Border.all(
-                  color: Theme.of(context).accentColor,
-                  width: 4.0,
-                )
+            decoration: widget.editingCellDecoration ?? BoxDecoration(
+              border: Border.all(
+                color: Theme.of(context).accentColor,
+                width: 4.0,
+              ),
             ),
           ),
         ],
