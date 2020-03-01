@@ -1,3 +1,7 @@
+## [0.1.0] - 2020-03-01
+
+* Added `editingOnLongPress` parameter, that controls if the editing mode is allowed
+
 ## [0.0.4] - 2020-01-24
 
 * Added `editingGridColor` and `editingCellDecoration` parameters to customize the widget appearance in editing mode

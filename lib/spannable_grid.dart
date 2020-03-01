@@ -94,14 +94,32 @@ class SpannableGrid extends StatefulWidget {
     this.spacing = 0.0,
     this.onCellChanged,
     this.editingGridColor = Colors.black12,
+    this.editingOnLongPress = true,
     this.editingCellDecoration,
   }) : super(key: key);
 
+  /// Items data
+  ///
+  /// A list of [SpannableGridCellData] objects, containing item's id, position,
+  /// size and content widget
   final List<SpannableGridCellData> cells;
+
+  /// Number of columns
   final int columns;
+
+  /// Number of rows
   final int rows;
+
+  /// Space between cells
   final double spacing;
+
+  /// A callback, that called when a cell position is changed by the user
   final Function(SpannableGridCellData) onCellChanged;
+
+  /// Allows editing by long press on grid item
+  ///
+  /// Defaults to 'true'
+  final bool editingOnLongPress;
 
   /// This color is used to display available grid cells in the editing mode.
   final Color editingGridColor;
@@ -230,17 +248,27 @@ class _SpannableGridState extends State<SpannableGrid> {
   }
 
   Widget _wrapperNormal(Object id, Widget child) {
-    return LayoutId(
-      id: id,
-      child: GestureDetector(
-        onLongPress: () { setState(() {
-          _editingMode = true;
-          _editingCell = _cells[id];
-          _updateCellsAndChildren();
-        }); },
+    if (widget.editingOnLongPress) {
+      return LayoutId(
+        id: id,
+        child: GestureDetector(
+          onLongPress: () {
+            setState(() {
+              _editingMode = true;
+              _editingCell = _cells[id];
+              _updateCellsAndChildren();
+            });
+          },
+          child: child,
+        ),
+      );
+    }
+    else {
+      return LayoutId(
+        id: id,
         child: child,
-      ),
-    );
+      );
+    }
   }
 
   Widget _wrapperFading(Object id, Widget child) {
