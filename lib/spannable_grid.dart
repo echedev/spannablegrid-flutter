@@ -150,6 +150,7 @@ class _SpannableGridState extends State<SpannableGrid> {
 
   @override
   Widget build(BuildContext context) {
+    _cells = widget.cells;
     return AspectRatio(
       aspectRatio: widget.columns / widget.rows,
       child: CustomMultiChildLayout(
