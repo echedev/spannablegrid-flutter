@@ -1,6 +1,6 @@
 name: spannable_grid
 description: Custom grid widget that allows it's cells to span columns and rows and supports editing.
-version: 0.1.1
+version: 0.1.2
 homepage: https://github.com/ech89899/spannablegrid-flutter
 repository: https://github.com/ech89899/spannablegrid-flutter
 

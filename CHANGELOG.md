@@ -1,4 +1,4 @@
-## [0.1.1] - 2020-09-12
+## [0.1.2] - 2020-09-12
 
 * Added `showGrid` parameter, that allows grid structure to be visible permanently, no only in the editing mode
 * Added `emptyCellView` parameter, that can be used to set custom view for empty cells

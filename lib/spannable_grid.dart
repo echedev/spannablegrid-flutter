@@ -46,12 +46,12 @@ import 'package:flutter/widgets.dart';
 /// ```
 class SpannableGridCellData {
   SpannableGridCellData(
-      { @required this.id,
-        this.child,
-        @required this.column,
-        @required this.row,
-        this.columnSpan = 1,
-        this.rowSpan = 1});
+      {@required this.id,
+      this.child,
+      @required this.column,
+      @required this.row,
+      this.columnSpan = 1,
+      this.rowSpan = 1});
 
   Object id;
   Widget child;
@@ -87,7 +87,8 @@ class SpannableGridCellData {
 /// ```
 ///
 class SpannableGrid extends StatefulWidget {
-  SpannableGrid({Key key,
+  SpannableGrid({
+    Key key,
     @required this.cells,
     @required this.columns,
     this.emptyCellView,
@@ -145,7 +146,6 @@ class SpannableGrid extends StatefulWidget {
 }
 
 class _SpannableGridState extends State<SpannableGrid> {
-
   Map<Object, SpannableGridCellData> _cells = Map();
   List<Widget> _children = List();
   double _cellWidth = 0.0;
@@ -171,8 +171,9 @@ class _SpannableGridState extends State<SpannableGrid> {
             columns: widget.columns,
             rows: widget.rows,
             spacing: widget.spacing,
-            onCellWidthCalculated: (cellWidth) { _cellWidth = cellWidth;}
-        ),
+            onCellWidthCalculated: (cellWidth) {
+              _cellWidth = cellWidth;
+            }),
         children: _children,
       ),
     );
@@ -195,35 +196,38 @@ class _SpannableGridState extends State<SpannableGrid> {
       for (int row = 1; row <= widget.rows; row++) {
         String id = 'SpannableCell-$column-$row';
         _cells[id] = SpannableGridCellData(
-            id: id,
-            child: null,
-            column: column,
-            row: row
-        );
+            id: id, child: null, column: column, row: row);
         if (_editingMode) {
           _children.add(LayoutId(
             id: id,
             child: DragTarget(
               builder: (context, List<SpannableGridCellData> candidateData,
                   rejectedData) {
-                return widget.emptyCellView ?? Container(
-                  color: widget.editingGridColor,
-                );
+                return widget.emptyCellView ??
+                    Container(
+                      color: widget.editingGridColor,
+                    );
               },
               onWillAccept: (data) {
                 int dragColumnOffset = _dragLocalPosition.dx ~/ _cellWidth;
                 int dragRowOffset = _dragLocalPosition.dy ~/ _cellWidth;
                 for (int y = row - dragRowOffset;
-                y <= row - dragRowOffset + _editingCell.rowSpan - 1; y++) {
+                    y <= row - dragRowOffset + _editingCell.rowSpan - 1;
+                    y++) {
                   for (int x = column - dragColumnOffset;
-                  x <= column - dragColumnOffset + _editingCell.columnSpan -
-                      1; x++) {
-                    if (y - 1 < 0 || y > widget.rows
-                        || x - 1 < 0 || x > widget.columns) {
+                      x <=
+                          column -
+                              dragColumnOffset +
+                              _editingCell.columnSpan -
+                              1;
+                      x++) {
+                    if (y - 1 < 0 ||
+                        y > widget.rows ||
+                        x - 1 < 0 ||
+                        x > widget.columns) {
                       return false;
                     }
-                    if (!_availableCells[y - 1][x - 1])
-                      return false;
+                    if (!_availableCells[y - 1][x - 1]) return false;
                   }
                 }
                 return true;
@@ -239,13 +243,13 @@ class _SpannableGridState extends State<SpannableGrid> {
               },
             ),
           ));
-        }
-        else {
+        } else {
           _children.add(LayoutId(
             id: id,
-            child: widget.emptyCellView ?? Container(
-              color: widget.editingGridColor,
-            ),
+            child: widget.emptyCellView ??
+                Container(
+                  color: widget.editingGridColor,
+                ),
           ));
         }
       }
@@ -260,12 +264,10 @@ class _SpannableGridState extends State<SpannableGrid> {
       if (_editingMode) {
         if (cell.id == _editingCell?.id) {
           child = _wrapperEditing(cell);
-        }
-        else {
+        } else {
           child = _wrapperFading(cell.id, cell.child);
         }
-      }
-      else {
+      } else {
         child = _wrapperNormal(cell.id, cell.child);
       }
       _children.add(child);
@@ -287,8 +289,7 @@ class _SpannableGridState extends State<SpannableGrid> {
           child: child,
         ),
       );
-    }
-    else {
+    } else {
       return LayoutId(
         id: id,
         child: child,
@@ -316,7 +317,9 @@ class _SpannableGridState extends State<SpannableGrid> {
           _updateCellsAndChildren();
         });
       },
-      onTapDown: (details) { _dragLocalPosition = details.localPosition; },
+      onTapDown: (details) {
+        _dragLocalPosition = details.localPosition;
+      },
       child: Stack(
         children: <Widget>[
           Opacity(
@@ -324,12 +327,13 @@ class _SpannableGridState extends State<SpannableGrid> {
             child: cell.child,
           ),
           Container(
-            decoration: widget.editingCellDecoration ?? BoxDecoration(
-              border: Border.all(
-                color: Theme.of(context).accentColor,
-                width: 4.0,
-              ),
-            ),
+            decoration: widget.editingCellDecoration ??
+                BoxDecoration(
+                  border: Border.all(
+                    color: Theme.of(context).accentColor,
+                    width: 4.0,
+                  ),
+                ),
           ),
         ],
       ),
@@ -361,10 +365,11 @@ class _SpannableGridState extends State<SpannableGrid> {
     }
     for (SpannableGridCellData cell in _cells.values) {
       // Skip temporary cells
-      if (cell.child == null || cell.id == _editingCell?.id)
-        continue;
+      if (cell.child == null || cell.id == _editingCell?.id) continue;
       for (int row = cell.row; row <= cell.row + cell.rowSpan - 1; row++) {
-        for (int column = cell.column ; column <= cell.column + cell.columnSpan - 1; column++) {
+        for (int column = cell.column;
+            column <= cell.column + cell.columnSpan - 1;
+            column++) {
           _availableCells[row - 1][column - 1] = false;
         }
       }
