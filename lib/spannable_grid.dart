@@ -90,7 +90,9 @@ class SpannableGrid extends StatefulWidget {
   SpannableGrid({Key key,
     @required this.cells,
     @required this.columns,
+    this.emptyCellView,
     @required this.rows,
+    this.showGrid = false,
     this.spacing = 0.0,
     this.onCellChanged,
     this.editingGridColor = Colors.black12,
@@ -107,8 +109,19 @@ class SpannableGrid extends StatefulWidget {
   /// Number of columns
   final int columns;
 
+  /// A widget to display in empty cells. Also it is used as a background for all
+  /// cells in the editing mode.
+  /// If it is not set, the empty cell appears as a grey ([Colors.black12]) square.
+  final Widget emptyCellView;
+
   /// Number of rows
   final int rows;
+
+  /// When set to 'true', the grid structure is always visible.
+  /// [emptyCellView] is used to display empty cells.
+  ///
+  /// Defaults to 'false'
+  final bool showGrid;
 
   /// Space between cells
   final double spacing;
@@ -169,7 +182,7 @@ class _SpannableGridState extends State<SpannableGrid> {
     _cells.clear();
     _children.clear();
 
-    if (_editingMode) {
+    if (_editingMode || widget.showGrid) {
       _addEmptyCellsAndChildren();
     }
     _addCellsAndWrappedChildren();
@@ -187,42 +200,54 @@ class _SpannableGridState extends State<SpannableGrid> {
             column: column,
             row: row
         );
-        _children.add(LayoutId(
-          id: id,
-          child: DragTarget(
-            builder: (context, List<SpannableGridCellData> candidateData, rejectedData) {
-              return Container(
-                color: widget.editingGridColor,
-              );
-            },
-            onWillAccept: (data) {
-              int dragColumnOffset = _dragLocalPosition.dx ~/ _cellWidth;
-              int dragRowOffset = _dragLocalPosition.dy ~/ _cellWidth;
-              for (int y = row - dragRowOffset;
-              y <= row - dragRowOffset + _editingCell.rowSpan - 1; y++) {
-                for (int x = column - dragColumnOffset;
-                x <= column - dragColumnOffset + _editingCell.columnSpan - 1; x++) {
-                  if (y - 1 < 0 || y > widget.rows
-                      || x - 1 < 0 || x > widget.columns) {
-                    return false;
-                  }
-                  if (!_availableCells[y - 1][x - 1])
-                    return false;
-                }
-              }
-              return true;
-            },
-            onAccept: (data) {
-              setState(() {
+        if (_editingMode) {
+          _children.add(LayoutId(
+            id: id,
+            child: DragTarget(
+              builder: (context, List<SpannableGridCellData> candidateData,
+                  rejectedData) {
+                return widget.emptyCellView ?? Container(
+                  color: widget.editingGridColor,
+                );
+              },
+              onWillAccept: (data) {
                 int dragColumnOffset = _dragLocalPosition.dx ~/ _cellWidth;
                 int dragRowOffset = _dragLocalPosition.dy ~/ _cellWidth;
-                data.column = column - dragColumnOffset;
-                data.row = row - dragRowOffset;
-                _updateCellsAndChildren();
-              });
-            },
-          ),
-        ));
+                for (int y = row - dragRowOffset;
+                y <= row - dragRowOffset + _editingCell.rowSpan - 1; y++) {
+                  for (int x = column - dragColumnOffset;
+                  x <= column - dragColumnOffset + _editingCell.columnSpan -
+                      1; x++) {
+                    if (y - 1 < 0 || y > widget.rows
+                        || x - 1 < 0 || x > widget.columns) {
+                      return false;
+                    }
+                    if (!_availableCells[y - 1][x - 1])
+                      return false;
+                  }
+                }
+                return true;
+              },
+              onAccept: (data) {
+                setState(() {
+                  int dragColumnOffset = _dragLocalPosition.dx ~/ _cellWidth;
+                  int dragRowOffset = _dragLocalPosition.dy ~/ _cellWidth;
+                  data.column = column - dragColumnOffset;
+                  data.row = row - dragRowOffset;
+                  _updateCellsAndChildren();
+                });
+              },
+            ),
+          ));
+        }
+        else {
+          _children.add(LayoutId(
+            id: id,
+            child: widget.emptyCellView ?? Container(
+              color: widget.editingGridColor,
+            ),
+          ));
+        }
       }
     }
   }
