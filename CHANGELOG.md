@@ -1,3 +1,7 @@
+## [0.1.3] - 2020-11-02
+
+* Added `rowHeight` parameter, that allows to set height of grid rows explicitly.
+
 ## [0.1.2] - 2020-09-12
 
 * Added `showGrid` parameter, that allows grid structure to be visible permanently, no only in the editing mode

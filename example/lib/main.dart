@@ -44,6 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
               cells: _getCells(),
               spacing: 2.0,
               onCellChanged: (cell) { print('Cell ${cell.id} changed'); },
+//              rowHeight: 20.0,
 //              showGrid: true,
 //              emptyCellView: Container(color: Colors.amberAccent,),
 //              editingOnLongPress: false,

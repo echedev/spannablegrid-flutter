@@ -92,6 +92,7 @@ class SpannableGrid extends StatefulWidget {
     @required this.cells,
     @required this.columns,
     this.emptyCellView,
+    this.rowHeight,
     @required this.rows,
     this.showGrid = false,
     this.spacing = 0.0,
@@ -114,6 +115,12 @@ class SpannableGrid extends StatefulWidget {
   /// cells in the editing mode.
   /// If it is not set, the empty cell appears as a grey ([Colors.black12]) square.
   final Widget emptyCellView;
+
+  /// The height of grid rows
+  ///
+  /// When omitted, the row height is equal to column width, which in turn is calculated
+  /// from [columns] and constraints provided by the parent widget.
+  final double rowHeight;
 
   /// Number of rows
   final int rows;
@@ -163,12 +170,12 @@ class _SpannableGridState extends State<SpannableGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: widget.columns / widget.rows,
+    return _wrapGrid(
       child: CustomMultiChildLayout(
         delegate: _SpannableGridDelegate(
             cells: _cells,
             columns: widget.columns,
+            rowHeight: widget.rowHeight,
             rows: widget.rows,
             spacing: widget.spacing,
             onCellWidthCalculated: (cellWidth) {
@@ -177,6 +184,20 @@ class _SpannableGridState extends State<SpannableGrid> {
         children: _children,
       ),
     );
+  }
+
+  Widget _wrapGrid({@required Widget child}) {
+    if (widget.rowHeight != null) {
+      return Container(
+        height: widget.rows * widget.rowHeight,
+        child: child,
+      );
+    } else {
+      return AspectRatio(
+        aspectRatio: widget.columns / widget.rows,
+        child: child,
+      );
+    }
   }
 
   void _updateCellsAndChildren() {
@@ -382,12 +403,14 @@ class _SpannableGridDelegate extends MultiChildLayoutDelegate {
     @required this.cells,
     @required this.columns,
     @required this.rows,
+    this.rowHeight,
     @required this.spacing,
     this.onCellWidthCalculated,
   });
 
   final Map<Object, SpannableGridCellData> cells;
   final int columns;
+  final double rowHeight;
   final int rows;
   final double spacing;
   final Function(double cellWidth) onCellWidthCalculated;
@@ -400,7 +423,8 @@ class _SpannableGridDelegate extends MultiChildLayoutDelegate {
 
     for (SpannableGridCellData cell in cells.values) {
       double childWidth = cell.columnSpan * cellWidth - spacing * 2;
-      double childHeight = cell.rowSpan * cellWidth - spacing * 2;
+      double childHeight =
+          cell.rowSpan * (rowHeight ?? cellWidth) - spacing * 2;
       layoutChild(
           cell.id,
           BoxConstraints(
@@ -411,7 +435,7 @@ class _SpannableGridDelegate extends MultiChildLayoutDelegate {
       positionChild(
           cell.id,
           Offset((cell.column - 1) * cellWidth + spacing,
-              (cell.row - 1) * cellWidth + spacing));
+              (cell.row - 1) * (rowHeight ?? cellWidth) + spacing));
     }
   }
 
