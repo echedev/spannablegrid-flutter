@@ -1,3 +1,8 @@
+## [0.1.4] - 2021-01-23
+
+* Fix a bug where the widget didn't refresh with updated cells.
+* Fix a crash while dragging the cell.
+
 ## [0.1.3] - 2020-11-02
 
 * Added `rowHeight` parameter, that allows to set height of grid rows explicitly.
