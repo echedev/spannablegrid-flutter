@@ -20,13 +20,14 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
-  String title;
+  final String title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _singleCell = false;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +50,17 @@ class _MyHomePageState extends State<MyHomePage> {
 //              emptyCellView: Container(color: Colors.amberAccent,),
 //              editingOnLongPress: false,
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextButton(
+                child: Text('Change'),
+                onPressed: () {
+                  setState(() {
+                    _singleCell = !_singleCell;
+                  });
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -56,67 +68,101 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   List<SpannableGridCellData> _getCells() {
-    List<SpannableGridCellData> result = List();
-    result.add(SpannableGridCellData(
-      column: 1,
-      row: 1,
-      columnSpan: 2,
-      rowSpan: 2,
-      id: "Test Cell 1",
-      child: Container(
-        color: Colors.lime,
-        child: Center(
-          child: Text("Tile 2x2",
-            style: Theme.of(context).textTheme.title,
+    var result = <SpannableGridCellData>[];
+    if (_singleCell) {
+      result.add(SpannableGridCellData(
+        column: 1,
+        row: 1,
+        columnSpan: 4,
+        rowSpan: 4,
+        id: "Test Cell 1",
+        child: Container(
+          color: Colors.lime,
+          child: Center(
+            child: Text("Tile 4x4",
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline6,
+            ),
           ),
         ),
-      ),
-    ));
-    result.add(SpannableGridCellData(
-      column: 4,
-      row: 1,
-      columnSpan: 1,
-      rowSpan: 1,
-      id: "Test Cell 2",
-      child: Container(
-        color: Colors.lime,
-        child: Center(
-          child: Text("Tile 1x1",
-            style: Theme.of(context).textTheme.title,
+      ));
+    }
+    else {
+      result.add(SpannableGridCellData(
+        column: 1,
+        row: 1,
+        columnSpan: 2,
+        rowSpan: 2,
+        id: "Test Cell 1",
+        child: Container(
+          color: Colors.lime,
+          child: Center(
+            child: Text("Tile 2x2",
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline6,
+            ),
           ),
         ),
-      ),
-    ));
-    result.add(SpannableGridCellData(
-      column: 1,
-      row: 4,
-      columnSpan: 3,
-      rowSpan: 1,
-      id: "Test Cell 3",
-      child: Container(
-        color: Colors.lightBlueAccent,
-        child: Center(
-          child: Text("Tile 3x1",
-            style: Theme.of(context).textTheme.title,
+      ));
+      result.add(SpannableGridCellData(
+        column: 4,
+        row: 1,
+        columnSpan: 1,
+        rowSpan: 1,
+        id: "Test Cell 2",
+        child: Container(
+          color: Colors.lime,
+          child: Center(
+            child: Text("Tile 1x1",
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline6,
+            ),
           ),
         ),
-      ),
-    ));
-    result.add(SpannableGridCellData(
-      column: 4,
-      row: 3,
-      columnSpan: 1,
-      rowSpan: 2,
-      id: "Test Cell 4",
-      child: Container(
-        color: Colors.lightBlueAccent,
-        child: Center(
-          child: Text("Tile 1x2",
-            style: Theme.of(context).textTheme.title,
+      ));
+      result.add(SpannableGridCellData(
+        column: 1,
+        row: 4,
+        columnSpan: 3,
+        rowSpan: 1,
+        id: "Test Cell 3",
+        child: Container(
+          color: Colors.lightBlueAccent,
+          child: Center(
+            child: Text("Tile 3x1",
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline6,
+            ),
           ),
         ),
-      ),
-    ));
+      ));
+      result.add(SpannableGridCellData(
+        column: 4,
+        row: 3,
+        columnSpan: 1,
+        rowSpan: 2,
+        id: "Test Cell 4",
+        child: Container(
+          color: Colors.lightBlueAccent,
+          child: Center(
+            child: Text("Tile 1x2",
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline6,
+            ),
+          ),
+        ),
+      ));
+    }
     return result;
   }
 }

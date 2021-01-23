@@ -154,12 +154,12 @@ class SpannableGrid extends StatefulWidget {
 
 class _SpannableGridState extends State<SpannableGrid> {
   Map<Object, SpannableGridCellData> _cells = Map();
-  List<Widget> _children = List();
+  final _children = <Widget>[];
   double _cellWidth = 0.0;
 
   bool _editingMode = false;
   SpannableGridCellData _editingCell;
-  List<List<bool>> _availableCells = List();
+  final _availableCells = <List<bool>>[];
   Offset _dragLocalPosition;
 
   @override
@@ -385,9 +385,9 @@ class _SpannableGridState extends State<SpannableGrid> {
   }
 
   void _calculateAvailableCells() {
-    _availableCells = List<List<bool>>();
+    _availableCells.clear();
     for (int row = 1; row <= widget.rows; row++) {
-      List<bool> rowCells = List<bool>();
+      var rowCells = <bool>[];
       for (int column = 1; column <= widget.columns; column++) {
         rowCells.add(true);
       }
