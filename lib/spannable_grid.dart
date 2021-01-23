@@ -236,28 +236,31 @@ class _SpannableGridState extends State<SpannableGrid> {
                     );
               },
               onWillAccept: (data) {
-                int dragColumnOffset = _dragLocalPosition.dx ~/ _cellWidth;
-                int dragRowOffset = _dragLocalPosition.dy ~/ _cellWidth;
-                for (int y = row - dragRowOffset;
-                    y <= row - dragRowOffset + _editingCell.rowSpan - 1;
-                    y++) {
-                  for (int x = column - dragColumnOffset;
-                      x <=
-                          column -
-                              dragColumnOffset +
-                              _editingCell.columnSpan -
-                              1;
-                      x++) {
-                    if (y - 1 < 0 ||
-                        y > widget.rows ||
-                        x - 1 < 0 ||
-                        x > widget.columns) {
-                      return false;
+                if (_dragLocalPosition != null) {
+                  int dragColumnOffset = _dragLocalPosition.dx ~/ _cellWidth;
+                  int dragRowOffset = _dragLocalPosition.dy ~/ _cellWidth;
+                  for (int y = row - dragRowOffset;
+                      y <= row - dragRowOffset + _editingCell.rowSpan - 1;
+                      y++) {
+                    for (int x = column - dragColumnOffset;
+                        x <=
+                            column -
+                                dragColumnOffset +
+                                _editingCell.columnSpan -
+                                1;
+                        x++) {
+                      if (y - 1 < 0 ||
+                          y > widget.rows ||
+                          x - 1 < 0 ||
+                          x > widget.columns) {
+                        return false;
+                      }
+                      if (!_availableCells[y - 1][x - 1]) return false;
                     }
-                    if (!_availableCells[y - 1][x - 1]) return false;
                   }
+                  return true;
                 }
-                return true;
+                return false;
               },
               onAccept: (data) {
                 setState(() {
