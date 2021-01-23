@@ -169,6 +169,12 @@ class _SpannableGridState extends State<SpannableGrid> {
   }
 
   @override
+  void didUpdateWidget(SpannableGrid oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _updateCellsAndChildren();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return _wrapGrid(
       child: CustomMultiChildLayout(
