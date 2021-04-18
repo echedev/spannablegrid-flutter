@@ -1,3 +1,7 @@
+## [0.2.0] - 2021-04-18
+
+* Migration to null safety.
+
 ## [0.1.4] - 2021-01-23
 
 * Fix a bug where the widget didn't refresh with updated cells.

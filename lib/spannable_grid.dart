@@ -46,15 +46,15 @@ import 'package:flutter/widgets.dart';
 /// ```
 class SpannableGridCellData {
   SpannableGridCellData(
-      {@required this.id,
+      {required this.id,
       this.child,
-      @required this.column,
-      @required this.row,
+      required this.column,
+      required this.row,
       this.columnSpan = 1,
       this.rowSpan = 1});
 
   Object id;
-  Widget child;
+  Widget? child;
   int column;
   int row;
   int columnSpan;
@@ -88,12 +88,12 @@ class SpannableGridCellData {
 ///
 class SpannableGrid extends StatefulWidget {
   SpannableGrid({
-    Key key,
-    @required this.cells,
-    @required this.columns,
+    Key? key,
+    required this.cells,
+    required this.columns,
     this.emptyCellView,
     this.rowHeight,
-    @required this.rows,
+    required this.rows,
     this.showGrid = false,
     this.spacing = 0.0,
     this.onCellChanged,
@@ -114,13 +114,13 @@ class SpannableGrid extends StatefulWidget {
   /// A widget to display in empty cells. Also it is used as a background for all
   /// cells in the editing mode.
   /// If it is not set, the empty cell appears as a grey ([Colors.black12]) square.
-  final Widget emptyCellView;
+  final Widget? emptyCellView;
 
   /// The height of grid rows
   ///
   /// When omitted, the row height is equal to column width, which in turn is calculated
   /// from [columns] and constraints provided by the parent widget.
-  final double rowHeight;
+  final double? rowHeight;
 
   /// Number of rows
   final int rows;
@@ -135,7 +135,7 @@ class SpannableGrid extends StatefulWidget {
   final double spacing;
 
   /// A callback, that called when a cell position is changed by the user
-  final Function(SpannableGridCellData) onCellChanged;
+  final Function(SpannableGridCellData?)? onCellChanged;
 
   /// Allows editing by long press on grid item
   ///
@@ -146,7 +146,7 @@ class SpannableGrid extends StatefulWidget {
   final Color editingGridColor;
 
   /// Decoration to highlight the editing cell in the editing mode.
-  final Decoration editingCellDecoration;
+  final Decoration? editingCellDecoration;
 
   @override
   _SpannableGridState createState() => _SpannableGridState();
@@ -158,9 +158,9 @@ class _SpannableGridState extends State<SpannableGrid> {
   double _cellWidth = 0.0;
 
   bool _editingMode = false;
-  SpannableGridCellData _editingCell;
+  SpannableGridCellData? _editingCell;
   final _availableCells = <List<bool>>[];
-  Offset _dragLocalPosition;
+  Offset? _dragLocalPosition;
 
   @override
   void didChangeDependencies() {
@@ -192,10 +192,10 @@ class _SpannableGridState extends State<SpannableGrid> {
     );
   }
 
-  Widget _wrapGrid({@required Widget child}) {
+  Widget _wrapGrid({required Widget child}) {
     if (widget.rowHeight != null) {
       return Container(
-        height: widget.rows * widget.rowHeight,
+        height: widget.rows * widget.rowHeight!,
         child: child,
       );
     } else {
@@ -228,25 +228,25 @@ class _SpannableGridState extends State<SpannableGrid> {
           _children.add(LayoutId(
             id: id,
             child: DragTarget(
-              builder: (context, List<SpannableGridCellData> candidateData,
+              builder: (context, List<SpannableGridCellData?> candidateData,
                   rejectedData) {
                 return widget.emptyCellView ??
                     Container(
                       color: widget.editingGridColor,
                     );
               },
-              onWillAccept: (data) {
+              onWillAccept: (dynamic data) {
                 if (_dragLocalPosition != null) {
-                  int dragColumnOffset = _dragLocalPosition.dx ~/ _cellWidth;
-                  int dragRowOffset = _dragLocalPosition.dy ~/ _cellWidth;
+                  int dragColumnOffset = _dragLocalPosition!.dx ~/ _cellWidth;
+                  int dragRowOffset = _dragLocalPosition!.dy ~/ _cellWidth;
                   for (int y = row - dragRowOffset;
-                      y <= row - dragRowOffset + _editingCell.rowSpan - 1;
+                      y <= row - dragRowOffset + _editingCell!.rowSpan - 1;
                       y++) {
                     for (int x = column - dragColumnOffset;
                         x <=
                             column -
                                 dragColumnOffset +
-                                _editingCell.columnSpan -
+                                _editingCell!.columnSpan -
                                 1;
                         x++) {
                       if (y - 1 < 0 ||
@@ -262,10 +262,10 @@ class _SpannableGridState extends State<SpannableGrid> {
                 }
                 return false;
               },
-              onAccept: (data) {
+              onAccept: (dynamic data) {
                 setState(() {
-                  int dragColumnOffset = _dragLocalPosition.dx ~/ _cellWidth;
-                  int dragRowOffset = _dragLocalPosition.dy ~/ _cellWidth;
+                  int dragColumnOffset = _dragLocalPosition!.dx ~/ _cellWidth;
+                  int dragRowOffset = _dragLocalPosition!.dy ~/ _cellWidth;
                   data.column = column - dragColumnOffset;
                   data.row = row - dragRowOffset;
                   _updateCellsAndChildren();
@@ -304,7 +304,7 @@ class _SpannableGridState extends State<SpannableGrid> {
     }
   }
 
-  Widget _wrapperNormal(Object id, Widget child) {
+  Widget _wrapperNormal(Object id, Widget? child) {
     if (widget.editingOnLongPress) {
       return LayoutId(
         id: id,
@@ -322,12 +322,12 @@ class _SpannableGridState extends State<SpannableGrid> {
     } else {
       return LayoutId(
         id: id,
-        child: child,
+        child: child!,
       );
     }
   }
 
-  Widget _wrapperFading(Object id, Widget child) {
+  Widget _wrapperFading(Object id, Widget? child) {
     return LayoutId(
       id: id,
       child: Opacity(
@@ -341,7 +341,7 @@ class _SpannableGridState extends State<SpannableGrid> {
     Widget wrappedChild = GestureDetector(
       onTap: () {
         setState(() {
-          widget.onCellChanged(_editingCell);
+          widget.onCellChanged!(_editingCell);
           _editingMode = false;
           _editingCell = null;
           _updateCellsAndChildren();
@@ -409,26 +409,26 @@ class _SpannableGridState extends State<SpannableGrid> {
 
 class _SpannableGridDelegate extends MultiChildLayoutDelegate {
   _SpannableGridDelegate({
-    @required this.cells,
-    @required this.columns,
-    @required this.rows,
+    required this.cells,
+    required this.columns,
+    required this.rows,
     this.rowHeight,
-    @required this.spacing,
+    required this.spacing,
     this.onCellWidthCalculated,
   });
 
   final Map<Object, SpannableGridCellData> cells;
   final int columns;
-  final double rowHeight;
+  final double? rowHeight;
   final int rows;
   final double spacing;
-  final Function(double cellWidth) onCellWidthCalculated;
+  final Function(double cellWidth)? onCellWidthCalculated;
 
   @override
   void performLayout(Size size) {
     print("_SpannableCellDelegate::performLayout(): $size");
     double cellWidth = size.width / columns;
-    onCellWidthCalculated(cellWidth);
+    onCellWidthCalculated!(cellWidth);
 
     for (SpannableGridCellData cell in cells.values) {
       double childWidth = cell.columnSpan * cellWidth - spacing * 2;
