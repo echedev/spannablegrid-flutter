@@ -1,3 +1,8 @@
+## [0.2.1] - 2021-07-11
+
+* Code clean up
+* Doc fixes
+
 ## [0.2.0] - 2021-04-18
 
 * Migration to null safety.

@@ -19,7 +19,7 @@ In the `dependencies:` section of your `pubspec.yaml`, add the following line:
 
 ```yaml
 dependencies:
-  spannable_grid: ^0.1.0
+  spannable_grid: ^0.2.0
 ```
 
 Import the package
