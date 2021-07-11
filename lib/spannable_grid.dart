@@ -426,7 +426,6 @@ class _SpannableGridDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
-    print("_SpannableCellDelegate::performLayout(): $size");
     double cellWidth = size.width / columns;
     onCellWidthCalculated!(cellWidth);
 
