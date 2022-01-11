@@ -161,9 +161,7 @@ class _SpannableGridState extends State<SpannableGrid> {
   Widget _constrainGrid({required Widget child}) {
     switch (widget.gridSize) {
       case SpannableGridSize.parent:
-        return SizedBox(
-          child: child,
-        );
+        return child;
       case SpannableGridSize.parentWidth:
       case SpannableGridSize.parentHeight:
         return AspectRatio(
