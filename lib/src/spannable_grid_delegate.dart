@@ -48,7 +48,7 @@ class SpannableGridDelegate extends MultiChildLayoutDelegate {
       positionChild(
           cell.id,
           Offset((cell.column - 1) * cellWidth + spacing,
-              (cell.row - 1) * cellWidth + spacing));
+              (cell.row - 1) * cellHeight + spacing));
     }
   }
 
