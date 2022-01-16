@@ -254,7 +254,7 @@ class _SpannableGridState extends State<SpannableGrid> {
         },
         onExitEditing: () {
           setState(() {
-            widget.onCellChanged!(_editingCell);
+            widget.onCellChanged?.call(_editingCell);
             _isEditing = false;
             _editingCell = null;
             _updateCellsAndChildren();
