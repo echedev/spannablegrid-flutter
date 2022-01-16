@@ -8,10 +8,10 @@ class SpannableGridDelegate extends MultiChildLayoutDelegate {
     required this.cells,
     required this.columns,
     required this.rows,
+    required this.onCellSizeCalculated,
     // this.rowHeight,
     required this.spacing,
     this.gridSize = SpannableGridSize.parentWidth,
-    this.onCellSizeCalculated,
   });
 
   final Map<Object, SpannableGridCellData> cells;
@@ -26,13 +26,13 @@ class SpannableGridDelegate extends MultiChildLayoutDelegate {
 
   final SpannableGridSize gridSize;
 
-  final Function(double height, double width)? onCellSizeCalculated;
+  final Function(Size size) onCellSizeCalculated;
 
   @override
   void performLayout(Size size) {
     final double cellHeight = size.height / rows;
     final double cellWidth = size.width / columns;
-    onCellSizeCalculated!(cellHeight, cellWidth);
+    onCellSizeCalculated(Size(cellWidth, cellHeight));
 
     for (SpannableGridCellData cell in cells.values) {
       final childHeight = cell.rowSpan * cellHeight - spacing * 2;
