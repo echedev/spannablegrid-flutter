@@ -36,8 +36,8 @@ class SpannableGridEmptyCellView extends StatelessWidget {
             rejectedData) {
           return emptyCellView;
         },
-        onWillAccept: (dynamic data) => onWillAccept(data),
-        onAccept: (dynamic data) => onAccept(data),
+        onWillAccept: (data) => onWillAccept(data!),
+        onAccept: (data) => onAccept(data),
       )
     : emptyCellView;
   }

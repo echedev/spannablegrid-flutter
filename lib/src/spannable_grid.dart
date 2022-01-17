@@ -173,6 +173,23 @@ class _SpannableGridState extends State<SpannableGrid> {
     }
   }
 
+  void _onEnterEditing(SpannableGridCellData cell) {
+    setState(() {
+      _isEditing = true;
+      _editingCell = _cells[cell.id];
+      _updateCellsAndChildren();
+    });
+  }
+
+  void _onExitEditing() {
+    setState(() {
+      widget.onCellChanged?.call(_editingCell);
+      _isEditing = false;
+      _editingCell = null;
+      _updateCellsAndChildren();
+    });
+  }
+
   void _updateCellsAndChildren() {
     _cells.clear();
     _children.clear();
@@ -222,7 +239,9 @@ class _SpannableGridState extends State<SpannableGrid> {
                         || x - 1 < 0 || x > widget.columns) {
                       return false;
                     }
-                    if (!_availableCells[y - 1][x - 1]) return false;
+                    if (!_availableCells[y - 1][x - 1]) {
+                      return false;
+                    }
                   }
                 }
                 return true;
@@ -241,25 +260,12 @@ class _SpannableGridState extends State<SpannableGrid> {
       Widget child = SpannableGridCellView(
         data: cell,
         editingStrategy: widget.editingStrategy,
-        editingStyle: widget.style,
+        style: widget.style,
         isEditing: _isEditing,
         isSelected: cell.id == _editingCell?.id,
         onDragStarted: (localPosition) => _dragLocalPosition = localPosition,
-        onEnterEditing: () {
-          setState(() {
-            _isEditing = true;
-            _editingCell = _cells[cell.id];
-            _updateCellsAndChildren();
-          });
-        },
-        onExitEditing: () {
-          setState(() {
-            widget.onCellChanged?.call(_editingCell);
-            _isEditing = false;
-            _editingCell = null;
-            _updateCellsAndChildren();
-          });
-        },
+        onEnterEditing: () => _onEnterEditing(cell),
+        onExitEditing: _onExitEditing,
         size: _cellSize == null ? const Size(0.0, 0.0) :
           Size(cell.columnSpan * _cellSize!.width - widget.style.spacing * 2,
           cell.rowSpan * _cellSize!.height - widget.style.spacing * 2),

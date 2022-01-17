@@ -9,7 +9,7 @@ class SpannableGridCellView extends StatelessWidget {
     Key? key,
     required this.data,
     required this.editingStrategy,
-    required this.editingStyle,
+    required this.style,
     required this.isEditing,
     required this.isSelected,
     required this.onDragStarted,
@@ -22,7 +22,7 @@ class SpannableGridCellView extends StatelessWidget {
 
   final SpannableGridEditingStrategy editingStrategy;
 
-  final SpannableGridStyle editingStyle;
+  final SpannableGridStyle style;
 
   final bool isEditing;
 
@@ -40,9 +40,9 @@ class SpannableGridCellView extends StatelessWidget {
   Widget build(BuildContext context) {
     var result = data.child!;
     if (isEditing) {
-      if (editingStyle.contentOpacity < 1.0) {
+      if (style.contentOpacity < 1.0) {
         result = Opacity(
-          opacity: editingStyle.contentOpacity,
+          opacity: style.contentOpacity,
           child: result,
         );
       }
@@ -51,7 +51,7 @@ class SpannableGridCellView extends StatelessWidget {
           children: [
             result,
             Container(
-              decoration: editingStyle.selectedCellDecoration ??
+              decoration: style.selectedCellDecoration ??
                   BoxDecoration(
                     border: Border.all(
                       color: Theme.of(context).primaryColor,
@@ -78,6 +78,11 @@ class SpannableGridCellView extends StatelessWidget {
           ),
           childWhenDragging: const SizedBox.shrink(),
           data: data,
+          onDragEnd: (details) {
+            if (editingStrategy.immediate) {
+              onExitEditing();
+            }
+          },
         );
       }
     }
@@ -89,7 +94,24 @@ class SpannableGridCellView extends StatelessWidget {
             child: result,
           );
         } else if (editingStrategy.immediate) {
-          // TODO: Wrap in Draggable
+          result = GestureDetector(
+            onPanDown: (details) {
+              onDragStarted(details.localPosition);
+              onEnterEditing();
+            },
+            child: result,
+          );
+          result = Draggable<SpannableGridCellData>(
+            child: result,
+            maxSimultaneousDrags: 1,
+            feedback: SizedBox(
+              width: size.width,
+              height: size.height,
+              child: result,
+            ),
+            childWhenDragging: const SizedBox.shrink(),
+            data: data,
+          );
         }
       }
     }
