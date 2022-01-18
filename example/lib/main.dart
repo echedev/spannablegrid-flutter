@@ -44,9 +44,6 @@ class _MyHomePageState extends State<MyHomePage> {
               rows: 4,
               cells: _getCells(),
               onCellChanged: (cell) { print('Cell ${cell.id} changed'); },
-              // editingStrategy: SpannableGridEditingStrategy.immediate().copyWith(
-              //   moveOnlyToNearby: true,
-              // ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),

@@ -40,10 +40,10 @@ class SpannableGridDelegate extends MultiChildLayoutDelegate {
       layoutChild(
           cell.id,
           BoxConstraints(
-              minWidth: childWidth,
-              maxWidth: childWidth,
-              minHeight: childHeight,
-              maxHeight: childHeight,
+            minWidth: childWidth,
+            maxWidth: childWidth,
+            minHeight: childHeight,
+            maxHeight: childHeight,
           ));
       positionChild(
           cell.id,

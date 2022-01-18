@@ -1,17 +1,19 @@
 # Spannable Grid
+<a href="https://pub.dev/packages/spannable_grid"><img src="https://img.shields.io/badge/pub-0.3.0-yellow" alt="pub version"></a>&nbsp;<a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue" alt="MIT License"></a>
 
-A Flutter **SpannableGrid** widget that allows it's cells to span columns 
+The **SpannableGrid** is a Flutter widget that allows its cells to span columns
 and rows and supports moving cells inside the grid.
 
 ![SpannableGrid Demo](./assets/spannablegrid-001.gif)
 
 ## Features
 
-- The widget is sized to fit its parent width
+- The widget is sized itself to fit its parent width and/or height
 - The number of columns and rows is fixed
 - Cells can span columns and rows
 - Supports editing mode, in which cells can be moved inside the grid to available places 
-- Uses theme's accent color to highlight the editing cell
+- Various editing strategies
+- Styling the grid and its cells
 
 ## Usage
 
@@ -19,7 +21,7 @@ In the `dependencies:` section of your `pubspec.yaml`, add the following line:
 
 ```yaml
 dependencies:
-  spannable_grid: ^0.2.0
+  spannable_grid: ^0.3.0
 ```
 
 Import the package
@@ -33,7 +35,7 @@ import 'package:spannable_grid/spannable_grid.dart';
 The `SpannableGrid` widget requires the list of `SpannableGridCellData` objects that define cells appearance.
 
 ```dart
-    List<SpannableGridCellData> cells = List();
+    final cells = <SpannableGridCellData>[];
     cells.add(SpannableGridCellData(
       column: 1,
       row: 1,
@@ -73,18 +75,45 @@ SpannableGrid(
   columns: 4,
   rows: 4,
   cells: cells,
-  spacing: 2.0,
   onCellChanged: (cell) { print('Cell ${cell.id} changed'); },
 ),
 ```
 
 #### Editing mode
 
-User can enter editing mode by long press on the cell. 
+In the editing mode user can move cells to another empty place withing the grid.
+
+Use `editingStrategy` parameter to define the behaviour in the editing mode.
+It has following options:
+
+| Name  | Description |
+|---|---|
+| `allowed`  | User can move the cells  |
+| `enterOnLongTap`  | User should use a long tap on the cell to enter the editing mode  |
+| `exitOnTap`  | When finished moving the cell, user should tap the cell to exit the editing mode  |
+| `immediate`  | User can move cells immediately, just by starting dragging them  |
+| `moveOnlyToNearby`  | The cell can be moved only to nearby empty cells  |
+
+User can enter editing mode by long press on the cell.
 
 In the editing mode the editing cell is highlighted, other cells are faded and the grid structure becomes visible. User can move editing cell to another available place inside the grid. 
 
-Tap on editing cell will exit the editing mode. The updated cell is returned in `onCellChanged` callback.
+The updated cell is returned in `onCellChanged` callback.
+
+#### Styling
+
+Use the `style` property to style the appearance of the grid and its cells.
+
+The following options are supported:
+
+| Name  | Description |
+|---|---|
+| `backgroundColor`  | It is used to display empty cells, when the `emptyCellView` parameter is not specified.  |
+| `contentOpacity`  | It is used in the editing mode to make the content cells transparent, so the underlying grid structure becomes visible.  |
+| `selectedCellDecoration`  | An additional decoration that is applied to the selected cell to highlight it in the editing mode.  |
+| `spacing`  | A space between gird cells.  |
+
+When the `showGrid` parameter is `true` the grid's structure is always visible. Otherwise it appears only in the editing mode.
 
 #### Full example
 

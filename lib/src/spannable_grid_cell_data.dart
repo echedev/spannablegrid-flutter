@@ -42,11 +42,11 @@ import 'package:flutter/widgets.dart';
 class SpannableGridCellData {
   SpannableGridCellData(
       {required this.id,
-        this.child,
-        required this.column,
-        required this.row,
-        this.columnSpan = 1,
-        this.rowSpan = 1});
+      this.child,
+      required this.column,
+      required this.row,
+      this.columnSpan = 1,
+      this.rowSpan = 1});
 
   Object id;
   Widget? child;

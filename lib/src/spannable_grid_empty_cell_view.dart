@@ -29,16 +29,19 @@ class SpannableGridEmptyCellView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final emptyCellView = content ?? Container(color: style.backgroundColor,);
+    final emptyCellView = content ??
+        Container(
+          color: style.backgroundColor,
+        );
     return isEditing
-      ? DragTarget<SpannableGridCellData>(
-        builder: (context, List<SpannableGridCellData?> candidateData,
-            rejectedData) {
-          return emptyCellView;
-        },
-        onWillAccept: (data) => onWillAccept(data!),
-        onAccept: (data) => onAccept(data),
-      )
-    : emptyCellView;
+        ? DragTarget<SpannableGridCellData>(
+            builder: (context, List<SpannableGridCellData?> candidateData,
+                rejectedData) {
+              return emptyCellView;
+            },
+            onWillAccept: (data) => onWillAccept(data!),
+            onAccept: (data) => onAccept(data),
+          )
+        : emptyCellView;
   }
 }

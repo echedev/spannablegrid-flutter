@@ -217,9 +217,10 @@ class _SpannableGridState extends State<SpannableGrid> {
             onAccept: (data) {
               setState(() {
                 if (_cellSize != null) {
-                  int dragColumnOffset = _dragLocalPosition!.dx ~/
-                      _cellSize!.width;
-                  int dragRowOffset = _dragLocalPosition!.dy ~/ _cellSize!.height;
+                  int dragColumnOffset =
+                      _dragLocalPosition!.dx ~/ _cellSize!.width;
+                  int dragRowOffset =
+                      _dragLocalPosition!.dy ~/ _cellSize!.height;
                   data.column = column - dragColumnOffset;
                   data.row = row - dragRowOffset;
                   _updateCellsAndChildren();
@@ -228,16 +229,20 @@ class _SpannableGridState extends State<SpannableGrid> {
             },
             onWillAccept: (data) {
               if (_dragLocalPosition != null && _cellSize != null) {
-                int dragColumnOffset = _dragLocalPosition!.dx ~/ _cellSize!.width;
+                int dragColumnOffset =
+                    _dragLocalPosition!.dx ~/ _cellSize!.width;
                 int dragRowOffset = _dragLocalPosition!.dy ~/ _cellSize!.height;
                 final minY = row - dragRowOffset;
                 final maxY = row - dragRowOffset + _editingCell!.rowSpan - 1;
                 for (int y = minY; y <= maxY; y++) {
                   final minX = column - dragColumnOffset;
-                  final maxX = column - dragColumnOffset + _editingCell!.columnSpan - 1;
+                  final maxX =
+                      column - dragColumnOffset + _editingCell!.columnSpan - 1;
                   for (int x = minX; x <= maxX; x++) {
-                    if (y - 1 < 0 || y > widget.rows
-                        || x - 1 < 0 || x > widget.columns) {
+                    if (y - 1 < 0 ||
+                        y > widget.rows ||
+                        x - 1 < 0 ||
+                        x > widget.columns) {
                       return false;
                     }
                     if (!_availableCells[y - 1][x - 1]) {
@@ -269,13 +274,17 @@ class _SpannableGridState extends State<SpannableGrid> {
         style: widget.style,
         isEditing: _isEditing,
         isSelected: cell.id == _editingCell?.id,
-        canMove: widget.editingStrategy.moveOnlyToNearby ? _canMoveNearby(cell) : true,
+        canMove: widget.editingStrategy.moveOnlyToNearby
+            ? _canMoveNearby(cell)
+            : true,
         onDragStarted: (localPosition) => _dragLocalPosition = localPosition,
         onEnterEditing: () => _onEnterEditing(cell),
         onExitEditing: _onExitEditing,
-        size: _cellSize == null ? const Size(0.0, 0.0) :
-        Size(cell.columnSpan * _cellSize!.width - widget.style.spacing * 2,
-            cell.rowSpan * _cellSize!.height - widget.style.spacing * 2),
+        size: _cellSize == null
+            ? const Size(0.0, 0.0)
+            : Size(
+                cell.columnSpan * _cellSize!.width - widget.style.spacing * 2,
+                cell.rowSpan * _cellSize!.height - widget.style.spacing * 2),
       );
       _children.add(LayoutId(
         id: cell.id,
@@ -298,8 +307,8 @@ class _SpannableGridState extends State<SpannableGrid> {
       if (cell.child == null || cell.id == _editingCell?.id) continue;
       for (int row = cell.row; row <= cell.row + cell.rowSpan - 1; row++) {
         for (int column = cell.column;
-        column <= cell.column + cell.columnSpan - 1;
-        column++) {
+            column <= cell.column + cell.columnSpan - 1;
+            column++) {
           _availableCells[row - 1][column - 1] = false;
         }
       }

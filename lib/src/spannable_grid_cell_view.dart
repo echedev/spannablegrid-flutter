@@ -93,8 +93,7 @@ class SpannableGridCellView extends StatelessWidget {
           },
         );
       }
-    }
-    else {
+    } else {
       if (editingStrategy.allowed) {
         if (editingStrategy.enterOnLongTap) {
           result = GestureDetector(
