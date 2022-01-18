@@ -102,7 +102,7 @@ The updated cell is returned in `onCellChanged` callback.
 
 #### Styling
 
-Use the `style` property to style the appearance of the grid and its cells.
+Use the `style` parameter to style the appearance of the grid and its cells.
 
 The following options are supported:
 
