@@ -12,6 +12,7 @@ class SpannableGridCellView extends StatelessWidget {
     required this.style,
     required this.isEditing,
     required this.isSelected,
+    required this.canMove,
     required this.onDragStarted,
     required this.onEnterEditing,
     required this.onExitEditing,
@@ -27,6 +28,8 @@ class SpannableGridCellView extends StatelessWidget {
   final bool isEditing;
 
   final bool isSelected;
+
+  final bool canMove;
 
   final Function(Offset localPosition) onDragStarted;
 
@@ -78,7 +81,12 @@ class SpannableGridCellView extends StatelessWidget {
           ),
           childWhenDragging: const SizedBox.shrink(),
           data: data,
-          onDragEnd: (details) {
+          onDraggableCanceled: (velocity, offset) {
+            if (editingStrategy.immediate) {
+              onExitEditing();
+            }
+          },
+          onDragCompleted: () {
             if (editingStrategy.immediate) {
               onExitEditing();
             }
@@ -93,7 +101,7 @@ class SpannableGridCellView extends StatelessWidget {
             onLongPress: onEnterEditing,
             child: result,
           );
-        } else if (editingStrategy.immediate) {
+        } else if (editingStrategy.immediate && canMove) {
           result = GestureDetector(
             onPanDown: (details) {
               onDragStarted(details.localPosition);

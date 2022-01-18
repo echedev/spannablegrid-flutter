@@ -8,6 +8,7 @@ class SpannableGridEditingStrategy {
     this.enterOnLongTap = true,
     this.exitOnTap = true,
     this.immediate = false,
+    this.moveOnlyToNearby = false,
   });
 
   factory SpannableGridEditingStrategy.disabled() => const SpannableGridEditingStrategy(
@@ -31,6 +32,24 @@ class SpannableGridEditingStrategy {
   final bool exitOnTap;
 
   final bool immediate;
+
+  final bool moveOnlyToNearby;
+
+  SpannableGridEditingStrategy copyWith({
+    bool? allowed,
+    bool? enterOnLongTap,
+    bool? exitOnTap,
+    bool? immediate,
+    bool? moveOnlyToNearby,
+  }) {
+    return SpannableGridEditingStrategy(
+      allowed: allowed ?? this.allowed,
+      enterOnLongTap: enterOnLongTap ?? this.enterOnLongTap,
+      exitOnTap: exitOnTap ?? this.exitOnTap,
+      immediate: immediate ?? this.immediate,
+      moveOnlyToNearby: moveOnlyToNearby ?? this.moveOnlyToNearby,
+    );
+  }
 }
 
 class SpannableGridStyle {

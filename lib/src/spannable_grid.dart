@@ -194,13 +194,14 @@ class _SpannableGridState extends State<SpannableGrid> {
     _cells.clear();
     _children.clear();
     if (_isEditing || widget.showGrid) {
-      _addEmptyCells();
+      _addEmptyCellsAndChildren();
     }
     _addContentCells();
     _calculateAvailableCells();
+    _addContentChildren();
   }
 
-  void _addEmptyCells() {
+  void _addEmptyCellsAndChildren() {
     for (int column = 1; column <= widget.columns; column++) {
       for (int row = 1; row <= widget.rows; row++) {
         String id = 'SpannableCell-$column-$row';
@@ -257,18 +258,24 @@ class _SpannableGridState extends State<SpannableGrid> {
   void _addContentCells() {
     for (SpannableGridCellData cell in widget.cells) {
       _cells[cell.id] = cell;
+    }
+  }
+
+  void _addContentChildren() {
+    for (SpannableGridCellData cell in widget.cells) {
       Widget child = SpannableGridCellView(
         data: cell,
         editingStrategy: widget.editingStrategy,
         style: widget.style,
         isEditing: _isEditing,
         isSelected: cell.id == _editingCell?.id,
+        canMove: widget.editingStrategy.moveOnlyToNearby ? _canMoveNearby(cell) : true,
         onDragStarted: (localPosition) => _dragLocalPosition = localPosition,
         onEnterEditing: () => _onEnterEditing(cell),
         onExitEditing: _onExitEditing,
         size: _cellSize == null ? const Size(0.0, 0.0) :
-          Size(cell.columnSpan * _cellSize!.width - widget.style.spacing * 2,
-          cell.rowSpan * _cellSize!.height - widget.style.spacing * 2),
+        Size(cell.columnSpan * _cellSize!.width - widget.style.spacing * 2,
+            cell.rowSpan * _cellSize!.height - widget.style.spacing * 2),
       );
       _children.add(LayoutId(
         id: cell.id,
@@ -287,7 +294,7 @@ class _SpannableGridState extends State<SpannableGrid> {
       _availableCells.add(rowCells);
     }
     for (SpannableGridCellData cell in _cells.values) {
-      // Skip temporary cells
+      // Skip empty cells (grid background) and selected cell
       if (cell.child == null || cell.id == _editingCell?.id) continue;
       for (int row = cell.row; row <= cell.row + cell.rowSpan - 1; row++) {
         for (int column = cell.column;
@@ -297,5 +304,57 @@ class _SpannableGridState extends State<SpannableGrid> {
         }
       }
     }
+  }
+
+  bool _canMoveNearby(SpannableGridCellData cell) {
+    final minColumn = cell.column;
+    final maxColumn = cell.column + cell.columnSpan - 1;
+    final minRow = cell.row;
+    final maxRow = cell.row + cell.rowSpan - 1;
+    // Check top
+    if (cell.row > 1) {
+      bool sideResult = true;
+      for (int column = minColumn; column <= maxColumn; column++) {
+        if (!_availableCells[cell.row - 2][column - 1]) {
+          sideResult = false;
+          break;
+        }
+      }
+      if (sideResult) return true;
+    }
+    // Bottom
+    if (cell.row + cell.rowSpan - 1 < widget.rows) {
+      bool sideResult = true;
+      for (int column = minColumn; column <= maxColumn; column++) {
+        if (!_availableCells[cell.row + cell.rowSpan - 1][column - 1]) {
+          sideResult = false;
+          break;
+        }
+      }
+      if (sideResult) return true;
+    }
+    // Left
+    if (cell.column > 1) {
+      bool sideResult = true;
+      for (int row = minRow; row <= maxRow; row++) {
+        if (!_availableCells[row - 1][cell.column - 2]) {
+          sideResult = false;
+          break;
+        }
+      }
+      if (sideResult) return true;
+    }
+    // Right
+    if (cell.column + cell.columnSpan - 1 < widget.columns) {
+      bool sideResult = true;
+      for (int row = minRow; row <= maxRow; row++) {
+        if (!_availableCells[row - 1][cell.column + cell.columnSpan - 1]) {
+          sideResult = false;
+          break;
+        }
+      }
+      if (sideResult) return true;
+    }
+    return false;
   }
 }
