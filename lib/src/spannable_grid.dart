@@ -139,7 +139,9 @@ class _SpannableGridState extends State<SpannableGrid> {
   @override
   void didUpdateWidget(SpannableGrid oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _updateCellsAndChildren();
+    setState(() {
+      _updateCellsAndChildren();
+    });
   }
 
   @override
