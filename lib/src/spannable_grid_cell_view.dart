@@ -67,7 +67,7 @@ class SpannableGridCellView extends StatelessWidget {
         if (editingStrategy.exitOnTap) {
           result = GestureDetector(
             onTap: onExitEditing,
-            onTapDown: (details) => onDragStarted(details.localPosition),
+            onPanDown: (details) => onDragStarted(details.localPosition),
             child: result,
           );
         }
